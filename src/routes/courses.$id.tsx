@@ -36,7 +36,7 @@ export const Route = createFileRoute("/courses/$id")({
   component: CourseDetail,
 });
 
-const chapters = [
+const chapters: { title: string; lessons: { t: string; d: string; done?: boolean; quiz?: boolean; locked?: boolean }[] }[] = [
   { title: "الباب الأول: المقدمات والأساسيات", lessons: [
     { t: "درس 1: تعريفات وأمثلة", d: "18:24", done: true },
     { t: "درس 2: القواعد الأساسية", d: "22:10", done: true },
