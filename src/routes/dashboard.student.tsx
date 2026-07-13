@@ -18,10 +18,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { courses } from "@/lib/data";
+import { RequireAuth } from "@/components/site/RequireAuth";
 
 export const Route = createFileRoute("/dashboard/student")({
   head: () => ({ meta: [{ title: "لوحة الطالب — M_Academy" }] }),
-  component: StudentDashboard,
+  component: () => (
+    <RequireAuth role="student">
+      <StudentDashboard />
+    </RequireAuth>
+  ),
 });
 
 const nav = [
