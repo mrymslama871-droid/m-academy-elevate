@@ -1,10 +1,11 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
   BookOpen,
   GraduationCap,
-  Home,
+  LayoutDashboard,
   LogIn,
+  LogOut,
   Menu,
   Moon,
   Search,
@@ -19,6 +20,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "./ThemeProvider";
 import { cn } from "@/lib/utils";
+import { useAuth, dashboardPathFor } from "@/hooks/use-auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links = [
   { to: "/", label: "الرئيسية" },
@@ -35,6 +45,10 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { theme, toggle } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { session, user, role, signOut } = useAuth();
+  const navigate = useNavigate();
+  const dashPath = dashboardPathFor(role);
+  const initial = (user?.email?.[0] ?? "?").toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 w-full">
