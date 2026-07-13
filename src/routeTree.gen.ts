@@ -13,12 +13,14 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeachersRouteImport } from './routes/teachers'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as CoursesRouteImport } from './routes/courses'
@@ -51,6 +53,11 @@ const ScheduleRoute = ScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -79,6 +86,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -145,12 +157,14 @@ export interface FileRoutesByFullPath {
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
@@ -168,12 +182,14 @@ export interface FileRoutesByTo {
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
@@ -192,12 +208,14 @@ export interface FileRoutesById {
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/schedule': typeof ScheduleRoute
   '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
@@ -217,12 +235,14 @@ export interface FileRouteTypes {
     | '/courses'
     | '/exams'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/notifications'
     | '/payment'
     | '/privacy'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/schedule'
     | '/support'
     | '/teachers'
@@ -240,12 +260,14 @@ export interface FileRouteTypes {
     | '/courses'
     | '/exams'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/notifications'
     | '/payment'
     | '/privacy'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/schedule'
     | '/support'
     | '/teachers'
@@ -263,12 +285,14 @@ export interface FileRouteTypes {
     | '/courses'
     | '/exams'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/notifications'
     | '/payment'
     | '/privacy'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/schedule'
     | '/support'
     | '/teachers'
@@ -287,12 +311,14 @@ export interface RootRouteChildren {
   CoursesRoute: typeof CoursesRouteWithChildren
   ExamsRoute: typeof ExamsRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   PaymentRoute: typeof PaymentRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ScheduleRoute: typeof ScheduleRoute
   SupportRoute: typeof SupportRoute
   TeachersRoute: typeof TeachersRoute
@@ -330,6 +356,13 @@ declare module '@tanstack/react-router' {
       path: '/schedule'
       fullPath: '/schedule'
       preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -372,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -473,12 +513,14 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesRoute: CoursesRouteWithChildren,
   ExamsRoute: ExamsRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   PaymentRoute: PaymentRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ScheduleRoute: ScheduleRoute,
   SupportRoute: SupportRoute,
   TeachersRoute: TeachersRoute,
