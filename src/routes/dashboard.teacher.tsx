@@ -4,9 +4,15 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+import { RequireAuth } from "@/components/site/RequireAuth";
+
 export const Route = createFileRoute("/dashboard/teacher")({
   head: () => ({ meta: [{ title: "لوحة المدرس — M_Academy" }] }),
-  component: TeacherDashboard,
+  component: () => (
+    <RequireAuth role="teacher">
+      <TeacherDashboard />
+    </RequireAuth>
+  ),
 });
 
 const actions = [

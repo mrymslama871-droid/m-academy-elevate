@@ -1,10 +1,11 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
   BookOpen,
   GraduationCap,
-  Home,
+  LayoutDashboard,
   LogIn,
+  LogOut,
   Menu,
   Moon,
   Search,
@@ -19,6 +20,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "./ThemeProvider";
 import { cn } from "@/lib/utils";
+import { useAuth, dashboardPathFor } from "@/hooks/use-auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const links = [
   { to: "/", label: "الرئيسية" },
@@ -35,6 +45,10 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { theme, toggle } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { session, user, role, signOut } = useAuth();
+  const navigate = useNavigate();
+  const dashPath = dashboardPathFor(role);
+  const initial = (user?.email?.[0] ?? "?").toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -95,24 +109,54 @@ export function Navbar() {
             <Button variant="ghost" size="icon" onClick={toggle} aria-label="الوضع الليلي" className="hidden md:inline-flex">
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            <Link to="/profile" className="hidden md:inline-flex">
-              <Button variant="ghost" size="icon" aria-label="الملف الشخصي">
-                <User className="h-5 w-5" />
-              </Button>
-            </Link>
-
-            <Link to="/login" className="hidden md:inline-flex">
-              <Button variant="ghost" className="gap-2">
-                <LogIn className="h-4 w-4" />
-                تسجيل الدخول
-              </Button>
-            </Link>
-            <Link to="/register" className="hidden md:inline-flex">
-              <Button className="gap-2 bg-gradient-primary text-primary-foreground shadow-elegant hover:opacity-95">
-                <UserPlus className="h-4 w-4" />
-                إنشاء حساب
-              </Button>
-            </Link>
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground font-bold shadow-glow">
+                    {initial}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>
+                    <div className="text-sm font-semibold truncate">{user?.email}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {role === "admin" ? "مدير" : role === "teacher" ? "مدرس" : "طالب"}
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate({ to: dashPath })}>
+                    <LayoutDashboard className="me-2 h-4 w-4" /> لوحة التحكم
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/profile" })}>
+                    <User className="me-2 h-4 w-4" /> الملف الشخصي
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await signOut();
+                      navigate({ to: "/login" });
+                    }}
+                  >
+                    <LogOut className="me-2 h-4 w-4" /> تسجيل الخروج
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link to="/login" className="hidden md:inline-flex">
+                  <Button variant="ghost" className="gap-2">
+                    <LogIn className="h-4 w-4" />
+                    تسجيل الدخول
+                  </Button>
+                </Link>
+                <Link to="/register" className="hidden md:inline-flex">
+                  <Button className="gap-2 bg-gradient-primary text-primary-foreground shadow-elegant hover:opacity-95">
+                    <UserPlus className="h-4 w-4" />
+                    إنشاء حساب
+                  </Button>
+                </Link>
+              </>
+            )}
 
             <Button
               variant="ghost"
@@ -173,18 +217,38 @@ export function Navbar() {
                   </Button>
                 </Link>
               </div>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                <Link to="/login" onClick={() => setOpen(false)}>
-                  <Button variant="outline" className="w-full gap-2">
-                    <LogIn className="h-4 w-4" /> دخول
+              {session ? (
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <Link to={dashPath} onClick={() => setOpen(false)}>
+                    <Button variant="outline" className="w-full gap-2">
+                      <LayoutDashboard className="h-4 w-4" /> لوحتي
+                    </Button>
+                  </Link>
+                  <Button
+                    className="w-full gap-2 bg-gradient-primary text-primary-foreground"
+                    onClick={async () => {
+                      await signOut();
+                      setOpen(false);
+                      navigate({ to: "/login" });
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" /> خروج
                   </Button>
-                </Link>
-                <Link to="/register" onClick={() => setOpen(false)}>
-                  <Button className="w-full gap-2 bg-gradient-primary text-primary-foreground">
-                    <BookOpen className="h-4 w-4" /> إنشاء حساب
-                  </Button>
-                </Link>
-              </div>
+                </div>
+              ) : (
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <Link to="/login" onClick={() => setOpen(false)}>
+                    <Button variant="outline" className="w-full gap-2">
+                      <LogIn className="h-4 w-4" /> دخول
+                    </Button>
+                  </Link>
+                  <Link to="/register" onClick={() => setOpen(false)}>
+                    <Button className="w-full gap-2 bg-gradient-primary text-primary-foreground">
+                      <BookOpen className="h-4 w-4" /> إنشاء حساب
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </nav>
           </div>
         </div>
