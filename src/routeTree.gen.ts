@@ -9,20 +9,41 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeachersRouteImport } from './routes/teachers'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardTeacherRouteImport } from './routes/dashboard.teacher'
+import { Route as DashboardStudentRouteImport } from './routes/dashboard.student'
+import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 import { Route as CoursesIdRouteImport } from './routes/courses.$id'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeachersRoute = TeachersRouteImport.update({
   id: '/teachers',
   path: '/teachers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScheduleRoute = ScheduleRouteImport.update({
@@ -30,14 +51,39 @@ const ScheduleRoute = ScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentRoute = PaymentRouteImport.update({
+  id: '/payment',
+  path: '/payment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamsRoute = ExamsRouteImport.update({
@@ -55,6 +101,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificatesRoute = CertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -63,6 +114,21 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardTeacherRoute = DashboardTeacherRouteImport.update({
+  id: '/dashboard/teacher',
+  path: '/dashboard/teacher',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardStudentRoute = DashboardStudentRouteImport.update({
+  id: '/dashboard/student',
+  path: '/dashboard/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardAdminRoute = DashboardAdminRouteImport.update({
+  id: '/dashboard/admin',
+  path: '/dashboard/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesIdRoute = CoursesIdRouteImport.update({
@@ -74,98 +140,189 @@ const CoursesIdRoute = CoursesIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/payment': typeof PaymentRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/schedule': typeof ScheduleRoute
+  '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
+  '/terms': typeof TermsRoute
   '/courses/$id': typeof CoursesIdRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/student': typeof DashboardStudentRoute
+  '/dashboard/teacher': typeof DashboardTeacherRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/payment': typeof PaymentRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/schedule': typeof ScheduleRoute
+  '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
+  '/terms': typeof TermsRoute
   '/courses/$id': typeof CoursesIdRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/student': typeof DashboardStudentRoute
+  '/dashboard/teacher': typeof DashboardTeacherRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/exams': typeof ExamsRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/payment': typeof PaymentRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/schedule': typeof ScheduleRoute
+  '/support': typeof SupportRoute
   '/teachers': typeof TeachersRoute
+  '/terms': typeof TermsRoute
   '/courses/$id': typeof CoursesIdRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/student': typeof DashboardStudentRoute
+  '/dashboard/teacher': typeof DashboardTeacherRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/certificates'
     | '/contact'
     | '/courses'
     | '/exams'
+    | '/faq'
+    | '/login'
     | '/notifications'
+    | '/payment'
+    | '/privacy'
     | '/profile'
+    | '/register'
     | '/schedule'
+    | '/support'
     | '/teachers'
+    | '/terms'
     | '/courses/$id'
+    | '/dashboard/admin'
+    | '/dashboard/student'
+    | '/dashboard/teacher'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/certificates'
     | '/contact'
     | '/courses'
     | '/exams'
+    | '/faq'
+    | '/login'
     | '/notifications'
+    | '/payment'
+    | '/privacy'
     | '/profile'
+    | '/register'
     | '/schedule'
+    | '/support'
     | '/teachers'
+    | '/terms'
     | '/courses/$id'
+    | '/dashboard/admin'
+    | '/dashboard/student'
+    | '/dashboard/teacher'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/certificates'
     | '/contact'
     | '/courses'
     | '/exams'
+    | '/faq'
+    | '/login'
     | '/notifications'
+    | '/payment'
+    | '/privacy'
     | '/profile'
+    | '/register'
     | '/schedule'
+    | '/support'
     | '/teachers'
+    | '/terms'
     | '/courses/$id'
+    | '/dashboard/admin'
+    | '/dashboard/student'
+    | '/dashboard/teacher'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CertificatesRoute: typeof CertificatesRoute
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRouteWithChildren
   ExamsRoute: typeof ExamsRoute
+  FaqRoute: typeof FaqRoute
+  LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
+  PaymentRoute: typeof PaymentRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
   ScheduleRoute: typeof ScheduleRoute
+  SupportRoute: typeof SupportRoute
   TeachersRoute: typeof TeachersRoute
+  TermsRoute: typeof TermsRoute
+  DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardStudentRoute: typeof DashboardStudentRoute
+  DashboardTeacherRoute: typeof DashboardTeacherRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/teachers': {
       id: '/teachers'
       path: '/teachers'
       fullPath: '/teachers'
       preLoaderRoute: typeof TeachersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schedule': {
@@ -175,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -182,11 +346,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment': {
+      id: '/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof PaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exams': {
@@ -210,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -222,6 +421,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/teacher': {
+      id: '/dashboard/teacher'
+      path: '/dashboard/teacher'
+      fullPath: '/dashboard/teacher'
+      preLoaderRoute: typeof DashboardTeacherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/student': {
+      id: '/dashboard/student'
+      path: '/dashboard/student'
+      fullPath: '/dashboard/student'
+      preLoaderRoute: typeof DashboardStudentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/dashboard/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses/$id': {
@@ -248,13 +468,24 @@ const CoursesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CertificatesRoute: CertificatesRoute,
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRouteWithChildren,
   ExamsRoute: ExamsRoute,
+  FaqRoute: FaqRoute,
+  LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
+  PaymentRoute: PaymentRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
   ScheduleRoute: ScheduleRoute,
+  SupportRoute: SupportRoute,
   TeachersRoute: TeachersRoute,
+  TermsRoute: TermsRoute,
+  DashboardAdminRoute: DashboardAdminRoute,
+  DashboardStudentRoute: DashboardStudentRoute,
+  DashboardTeacherRoute: DashboardTeacherRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
