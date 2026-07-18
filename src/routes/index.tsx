@@ -146,13 +146,14 @@ function HomePage() {
                 </div>
                 <Badge className="bg-gold/90 text-primary hover:bg-gold">جديد</Badge>
               </div>
-              <div className="mt-6 aspect-video overflow-hidden rounded-2xl bg-gradient-to-br from-primary/60 to-brand/60">
+              <Link to="/courses/$id" params={{ id: "math-3s" }} className="mt-6 block aspect-video overflow-hidden rounded-2xl bg-gradient-to-br from-primary/60 to-brand/60">
                 <div className="grid h-full place-items-center">
-                  <div className="grid h-16 w-16 place-items-center rounded-full bg-white/90 text-primary shadow-glow">
+                  <div className="grid h-16 w-16 place-items-center rounded-full bg-white/90 text-primary shadow-glow transition-transform hover:scale-105">
                     <Play className="h-7 w-7 fill-current" />
                   </div>
                 </div>
-              </div>
+              </Link>
+
               <div className="mt-5 grid grid-cols-3 gap-3 text-center text-xs">
                 {[
                   { icon: Clock, label: "62 ساعة" },
