@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      assignments: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          subject_id: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          subject_id?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          subject_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enrollments: {
         Row: {
           created_at: string
@@ -137,6 +172,51 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read_at: string | null
+          ref_id: string | null
+          ref_kind: string | null
+          reminder_bucket: string | null
+          scheduled_for: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          ref_id?: string | null
+          ref_kind?: string | null
+          reminder_bucket?: string | null
+          scheduled_for?: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          ref_id?: string | null
+          ref_kind?: string | null
+          reminder_bucket?: string | null
+          scheduled_for?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -253,6 +333,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_reminder_notifications: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
