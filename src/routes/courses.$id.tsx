@@ -62,6 +62,29 @@ function CourseDetail() {
   const { course } = Route.useLoaderData();
   const [playing, setPlaying] = useState(false);
   const [comment, setComment] = useState("");
+  const [enrolling, setEnrolling] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEnroll = async () => {
+    if (!user) {
+      toast.error("سجّل دخولك أولاً للاشتراك في المادة");
+      navigate({ to: "/login" });
+      return;
+    }
+    setEnrolling(true);
+    try {
+      await enrollInSubject(user.id, course.id);
+      toast.success("تم تسجيلك في المادة، أكمل الدفع لتفعيل الاشتراك");
+      navigate({ to: "/payment" });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "تعذر الاشتراك";
+      toast.error(msg);
+    } finally {
+      setEnrolling(false);
+    }
+  };
+
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
