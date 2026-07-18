@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.generate_reminder_notifications() FROM PUBLIC, authenticated, anon;
