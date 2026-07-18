@@ -112,9 +112,12 @@ function StudentDashboard() {
                   <div className="text-xs text-muted-foreground">{c.teacher}</div>
                   <Progress value={Math.floor(Math.random() * 60) + 20} className="mt-2 h-1.5" />
                 </div>
-                <Button size="sm" className="bg-gradient-primary text-primary-foreground gap-2">
-                  <Play className="h-4 w-4" /> متابعة
-                </Button>
+                <Link to="/courses/$id" params={{ id: c.id }}>
+                  <Button size="sm" className="bg-gradient-primary text-primary-foreground gap-2">
+                    <Play className="h-4 w-4" /> متابعة
+                  </Button>
+                </Link>
+
               </div>
             ))}
           </div>

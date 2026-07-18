@@ -1,5 +1,6 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   BookOpen,
   CheckCircle2,
@@ -23,6 +24,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { courses } from "@/lib/data";
+import { useAuth } from "@/hooks/use-auth";
+import { enrollInSubject } from "@/lib/enrollments";
+
 
 export const Route = createFileRoute("/courses/$id")({
   loader: ({ params }) => {
@@ -58,6 +62,29 @@ function CourseDetail() {
   const { course } = Route.useLoaderData();
   const [playing, setPlaying] = useState(false);
   const [comment, setComment] = useState("");
+  const [enrolling, setEnrolling] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEnroll = async () => {
+    if (!user) {
+      toast.error("سجّل دخولك أولاً للاشتراك في المادة");
+      navigate({ to: "/login" });
+      return;
+    }
+    setEnrolling(true);
+    try {
+      await enrollInSubject(user.id, course.id);
+      toast.success("تم تسجيلك في المادة، أكمل الدفع لتفعيل الاشتراك");
+      navigate({ to: "/payment" });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "تعذر الاشتراك";
+      toast.error(msg);
+    } finally {
+      setEnrolling(false);
+    }
+  };
+
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
@@ -287,8 +314,18 @@ function CourseDetail() {
               <div className="text-2xl font-black">{course.price} ج.م</div>
               {course.oldPrice && <div className="text-sm line-through opacity-80">{course.oldPrice} ج.م</div>}
               <Link to="/payment">
-                <Button className="mt-3 w-full bg-white text-primary hover:bg-white/90">اشترك الآن</Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    void handleEnroll();
+                  }}
+                  disabled={enrolling}
+                  className="mt-3 w-full bg-white text-primary hover:bg-white/90"
+                >
+                  {enrolling ? "جاري الاشتراك..." : "اشترك الآن"}
+                </Button>
               </Link>
+
               <button className="mt-2 w-full rounded-md border border-white/20 py-2 text-sm hover:bg-white/10">
                 إضافة للمفضلة
               </button>
