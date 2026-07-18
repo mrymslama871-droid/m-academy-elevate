@@ -164,7 +164,7 @@ function NotificationsPage() {
                 );
                 return (
                   <div key={n.id} onClick={() => unread && markOneRead(n.id)}>
-                    {n.link ? <Link to={n.link as string}>{inner}</Link> : inner}
+                    {n.link ? <a href={n.link}>{inner}</a> : inner}
                   </div>
                 );
               })}
