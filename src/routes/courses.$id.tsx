@@ -314,8 +314,18 @@ function CourseDetail() {
               <div className="text-2xl font-black">{course.price} ج.م</div>
               {course.oldPrice && <div className="text-sm line-through opacity-80">{course.oldPrice} ج.م</div>}
               <Link to="/payment">
-                <Button className="mt-3 w-full bg-white text-primary hover:bg-white/90">اشترك الآن</Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    void handleEnroll();
+                  }}
+                  disabled={enrolling}
+                  className="mt-3 w-full bg-white text-primary hover:bg-white/90"
+                >
+                  {enrolling ? "جاري الاشتراك..." : "اشترك الآن"}
+                </Button>
               </Link>
+
               <button className="mt-2 w-full rounded-md border border-white/20 py-2 text-sm hover:bg-white/10">
                 إضافة للمفضلة
               </button>
