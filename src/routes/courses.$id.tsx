@@ -1,5 +1,6 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   BookOpen,
   CheckCircle2,
@@ -23,6 +24,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { courses } from "@/lib/data";
+import { useAuth } from "@/hooks/use-auth";
+import { enrollInSubject } from "@/lib/enrollments";
+
 
 export const Route = createFileRoute("/courses/$id")({
   loader: ({ params }) => {
