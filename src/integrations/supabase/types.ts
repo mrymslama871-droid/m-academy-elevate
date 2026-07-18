@@ -14,6 +14,129 @@ export type Database = {
   }
   public: {
     Tables: {
+      enrollments: {
+        Row: {
+          created_at: string
+          id: string
+          progress: number
+          status: string
+          subject_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          progress?: number
+          status?: string
+          subject_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          progress?: number
+          status?: string
+          subject_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exams: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          scheduled_at: string | null
+          subject_id: string | null
+          title: string
+          total_questions: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          scheduled_at?: string | null
+          subject_id?: string | null
+          title: string
+          total_questions?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          scheduled_at?: string | null
+          subject_id?: string | null
+          title?: string
+          total_questions?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exams_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          chapter: string
+          created_at: string
+          duration: string | null
+          id: string
+          is_free: boolean
+          position: number
+          subject_id: string
+          title: string
+          video_url: string | null
+        }
+        Insert: {
+          chapter: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          is_free?: boolean
+          position?: number
+          subject_id: string
+          title: string
+          video_url?: string | null
+        }
+        Update: {
+          chapter?: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          is_free?: boolean
+          position?: number
+          subject_id?: string
+          title?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -43,6 +166,63 @@ export type Database = {
           last_name?: string | null
           phone?: string | null
           stage?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          grade: string
+          hours: number | null
+          id: string
+          lessons_count: number | null
+          old_price: number | null
+          price: number
+          rating: number | null
+          students_count: number | null
+          subject: string
+          tag: string | null
+          teacher: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          grade: string
+          hours?: number | null
+          id: string
+          lessons_count?: number | null
+          old_price?: number | null
+          price?: number
+          rating?: number | null
+          students_count?: number | null
+          subject: string
+          tag?: string | null
+          teacher: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          grade?: string
+          hours?: number | null
+          id?: string
+          lessons_count?: number | null
+          old_price?: number | null
+          price?: number
+          rating?: number | null
+          students_count?: number | null
+          subject?: string
+          tag?: string | null
+          teacher?: string
+          title?: string
           updated_at?: string
         }
         Relationships: []
