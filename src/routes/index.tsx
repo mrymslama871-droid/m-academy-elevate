@@ -132,6 +132,12 @@ function HomePage() {
 
           {/* Hero visual card */}
           <div className="relative mx-auto w-full max-w-lg">
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200"
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-8 -z-10 h-[calc(100%+4rem)] w-[calc(100%+4rem)] object-cover opacity-30 mix-blend-luminosity"
+            />
             <div className="absolute -inset-4 rounded-3xl bg-gradient-to-l from-brand/40 to-primary-glow/40 blur-2xl" />
             <div className="relative rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl shadow-glow">
               <div className="flex items-center justify-between">
