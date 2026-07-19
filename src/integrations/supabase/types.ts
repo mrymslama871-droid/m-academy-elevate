@@ -87,6 +87,94 @@ export type Database = {
           },
         ]
       }
+      exam_attempts: {
+        Row: {
+          answers: Json
+          auto_submitted: boolean
+          created_at: string
+          duration_seconds: number
+          exam_id: string
+          id: string
+          score: number
+          submitted_at: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          auto_submitted?: boolean
+          created_at?: string
+          duration_seconds?: number
+          exam_id: string
+          id?: string
+          score?: number
+          submitted_at?: string
+          total?: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          auto_submitted?: boolean
+          created_at?: string
+          duration_seconds?: number
+          exam_id?: string
+          id?: string
+          score?: number
+          submitted_at?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_attempts_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_questions: {
+        Row: {
+          correct_index: number
+          created_at: string
+          exam_id: string
+          explanation: string | null
+          id: string
+          options: Json
+          order_index: number
+          question: string
+        }
+        Insert: {
+          correct_index: number
+          created_at?: string
+          exam_id: string
+          explanation?: string | null
+          id?: string
+          options: Json
+          order_index?: number
+          question: string
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string
+          exam_id?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          order_index?: number
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_questions_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exams: {
         Row: {
           created_at: string

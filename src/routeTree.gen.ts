@@ -28,6 +28,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ExamsIdRouteImport } from './routes/exams.$id'
 import { Route as DashboardTeacherRouteImport } from './routes/dashboard.teacher'
 import { Route as DashboardStudentRouteImport } from './routes/dashboard.student'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
@@ -128,6 +129,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamsIdRoute = ExamsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ExamsRoute,
+} as any)
 const DashboardTeacherRoute = DashboardTeacherRouteImport.update({
   id: '/dashboard/teacher',
   path: '/dashboard/teacher',
@@ -155,7 +161,7 @@ export interface FileRoutesByFullPath {
   '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/exams': typeof ExamsRoute
+  '/exams': typeof ExamsRouteWithChildren
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/dashboard/teacher': typeof DashboardTeacherRoute
+  '/exams/$id': typeof ExamsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -180,7 +187,7 @@ export interface FileRoutesByTo {
   '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/exams': typeof ExamsRoute
+  '/exams': typeof ExamsRouteWithChildren
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/dashboard/teacher': typeof DashboardTeacherRoute
+  '/exams/$id': typeof ExamsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -206,7 +214,7 @@ export interface FileRoutesById {
   '/certificates': typeof CertificatesRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/exams': typeof ExamsRoute
+  '/exams': typeof ExamsRouteWithChildren
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/dashboard/teacher': typeof DashboardTeacherRoute
+  '/exams/$id': typeof ExamsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/student'
     | '/dashboard/teacher'
+    | '/exams/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/student'
     | '/dashboard/teacher'
+    | '/exams/$id'
   id:
     | '__root__'
     | '/'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/student'
     | '/dashboard/teacher'
+    | '/exams/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -309,7 +321,7 @@ export interface RootRouteChildren {
   CertificatesRoute: typeof CertificatesRoute
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRouteWithChildren
-  ExamsRoute: typeof ExamsRoute
+  ExamsRoute: typeof ExamsRouteWithChildren
   FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
@@ -463,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exams/$id': {
+      id: '/exams/$id'
+      path: '/$id'
+      fullPath: '/exams/$id'
+      preLoaderRoute: typeof ExamsIdRouteImport
+      parentRoute: typeof ExamsRoute
+    }
     '/dashboard/teacher': {
       id: '/dashboard/teacher'
       path: '/dashboard/teacher'
@@ -505,13 +524,23 @@ const CoursesRouteChildren: CoursesRouteChildren = {
 const CoursesRouteWithChildren =
   CoursesRoute._addFileChildren(CoursesRouteChildren)
 
+interface ExamsRouteChildren {
+  ExamsIdRoute: typeof ExamsIdRoute
+}
+
+const ExamsRouteChildren: ExamsRouteChildren = {
+  ExamsIdRoute: ExamsIdRoute,
+}
+
+const ExamsRouteWithChildren = ExamsRoute._addFileChildren(ExamsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CertificatesRoute: CertificatesRoute,
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRouteWithChildren,
-  ExamsRoute: ExamsRoute,
+  ExamsRoute: ExamsRouteWithChildren,
   FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,

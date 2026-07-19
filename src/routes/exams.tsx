@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AlarmClock, CheckCircle2, FileText, Play, RotateCcw, Timer, Trophy } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AlarmClock, CheckCircle2, FileText, Play, Timer, Trophy } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/exams")({
   head: () => ({ meta: [{ title: "الامتحانات — M_Academy" }] }),
@@ -18,25 +20,54 @@ const kinds = [
   { icon: Trophy, title: "الامتحان النهائي", text: "امتحان تراكمي شامل للمنهج." },
 ];
 
-const upcoming = [
-  { title: "امتحان الباب الأول — رياضيات", date: "17 يوليو 2026", time: "07:00 م", duration: "45 دقيقة", questions: 25 },
-  { title: "امتحان الدرس 4 — فيزياء", date: "18 يوليو 2026", time: "05:00 م", duration: "20 دقيقة", questions: 15 },
-  { title: "الامتحان النهائي — كيمياء", date: "25 يوليو 2026", time: "08:00 م", duration: "90 دقيقة", questions: 60 },
-];
+type ExamRow = {
+  id: string;
+  title: string;
+  subject_id: string | null;
+  duration_minutes: number;
+  total_questions: number;
+  scheduled_at: string | null;
+};
 
-const results = [
-  { title: "امتحان الباب الثالث — إنجليزي", score: 92, total: 100, status: "ممتاز" },
-  { title: "امتحان الدرس 2 — عربي", score: 78, total: 100, status: "جيد جداً" },
-  { title: "امتحان الباب الأول — أحياء", score: 88, total: 100, status: "ممتاز" },
-];
+type AttemptRow = {
+  id: string;
+  exam_id: string;
+  score: number;
+  total: number;
+  submitted_at: string;
+  exams: { title: string } | null;
+};
 
 function ExamsPage() {
+  const { user } = useAuth();
+  const [exams, setExams] = useState<ExamRow[]>([]);
+  const [attempts, setAttempts] = useState<AttemptRow[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("exams")
+      .select("id,title,subject_id,duration_minutes,total_questions,scheduled_at")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setExams(data ?? []));
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("exam_attempts")
+      .select("id,exam_id,score,total,submitted_at,exams(title)")
+      .eq("user_id", user.id)
+      .order("submitted_at", { ascending: false })
+      .limit(10)
+      .then(({ data }) => setAttempts((data as unknown as AttemptRow[]) ?? []));
+  }, [user]);
+
   return (
     <>
       <PageHeader
         eyebrow="نظام الامتحانات"
-        title="امتحانات دقيقة وتصحيح فوري"
-        description="بنك أسئلة عشوائي، مؤقت زمني، تصحيح تلقائي، وعرض الإجابات الصحيحة مع تقرير مفصل عن أدائك."
+        title="امتحانات تفاعلية وتصحيح فوري"
+        description="مؤقت زمني تنازلي، تصحيح تلقائي فور الإنهاء، وعرض الإجابات الصحيحة مع شرح لكل سؤال."
       />
 
       <section className="mx-auto max-w-7xl px-6 py-14">
@@ -54,21 +85,31 @@ function ExamsPage() {
 
         <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div>
-            <h2 className="mb-4 text-xl font-extrabold">امتحانات قادمة</h2>
+            <h2 className="mb-4 text-xl font-extrabold">الامتحانات المتاحة</h2>
             <div className="space-y-3">
-              {upcoming.map((e, i) => (
-                <Card key={i} className="flex flex-wrap items-center justify-between gap-3 p-5">
+              {exams.length === 0 && (
+                <Card className="p-5 text-sm text-muted-foreground">لا توجد امتحانات حالياً.</Card>
+              )}
+              {exams.map((e) => (
+                <Card key={e.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
                   <div>
                     <div className="font-bold">{e.title}</div>
                     <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1"><AlarmClock className="h-3.5 w-3.5" /> {e.date} — {e.time}</span>
-                      <span>{e.duration}</span>
-                      <span>{e.questions} سؤال</span>
+                      {e.scheduled_at && (
+                        <span className="flex items-center gap-1">
+                          <AlarmClock className="h-3.5 w-3.5" />
+                          {new Date(e.scheduled_at).toLocaleString("ar-EG")}
+                        </span>
+                      )}
+                      <span>{e.duration_minutes} دقيقة</span>
+                      <span>{e.total_questions} سؤال</span>
                     </div>
                   </div>
-                  <Button className="bg-gradient-primary text-primary-foreground gap-2">
-                    <Play className="h-4 w-4" /> ابدأ الامتحان
-                  </Button>
+                  <Link to="/exams/$id" params={{ id: e.id }}>
+                    <Button className="bg-gradient-primary text-primary-foreground gap-2">
+                      <Play className="h-4 w-4" /> ابدأ الامتحان
+                    </Button>
+                  </Link>
                 </Card>
               ))}
             </div>
@@ -77,37 +118,45 @@ function ExamsPage() {
           <div>
             <h2 className="mb-4 text-xl font-extrabold">نتائجي السابقة</h2>
             <div className="space-y-3">
-              {results.map((r, i) => (
-                <Card key={i} className="p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <div className="font-bold">{r.title}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">التقييم: {r.status}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-black text-gradient">{r.score}<span className="text-sm text-muted-foreground">/{r.total}</span></div>
-                    </div>
-                  </div>
-                  <Progress value={r.score} className="mt-3 h-2" />
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" className="gap-2"><CheckCircle2 className="h-4 w-4" /> عرض الإجابات</Button>
-                    <Button variant="outline" size="sm" className="gap-2"><RotateCcw className="h-4 w-4" /> إعادة الامتحان</Button>
-                  </div>
+              {!user && (
+                <Card className="p-5 text-sm text-muted-foreground">
+                  <Link to="/login" className="text-primary underline">سجّل دخولك</Link> لعرض نتائجك.
                 </Card>
-              ))}
+              )}
+              {user && attempts.length === 0 && (
+                <Card className="p-5 text-sm text-muted-foreground">لم تقم بأي امتحان بعد.</Card>
+              )}
+              {attempts.map((a) => {
+                const pct = a.total ? Math.round((a.score / a.total) * 100) : 0;
+                const status = pct >= 85 ? "ممتاز" : pct >= 70 ? "جيد جداً" : pct >= 50 ? "جيد" : "يحتاج تحسين";
+                return (
+                  <Card key={a.id} className="p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <div className="font-bold">{a.exams?.title ?? "امتحان"}</div>
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          التقييم: {status} • {new Date(a.submitted_at).toLocaleDateString("ar-EG")}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-black text-gradient">
+                          {a.score}
+                          <span className="text-sm text-muted-foreground">/{a.total}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <Progress value={pct} className="mt-3 h-2" />
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <Link to="/exams/$id" params={{ id: a.exam_id }}>
+                        <Button variant="outline" size="sm" className="gap-2">
+                          <CheckCircle2 className="h-4 w-4" /> إعادة الامتحان
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
+                );
+              })}
             </div>
-          </div>
-        </div>
-
-        <div className="mt-14 rounded-3xl bg-gradient-hero p-8 text-primary-foreground">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h3 className="text-2xl font-black">بنك الأسئلة العشوائي</h3>
-              <p className="mt-1 text-primary-foreground/80">أكثر من 12,000 سؤال متنوع مع إمكانية توليد امتحان مخصص.</p>
-            </div>
-            <Link to="/exams">
-              <Button className="bg-white text-primary hover:bg-white/90">توليد امتحان مخصص</Button>
-            </Link>
           </div>
         </div>
       </section>
